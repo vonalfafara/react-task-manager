@@ -1,0 +1,15 @@
+.login {
+  max-width: 400px;
+  width: 100%;
+}
+
+.login .p-inputtext {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.login .actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}

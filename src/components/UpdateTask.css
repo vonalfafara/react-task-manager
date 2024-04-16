@@ -1,0 +1,15 @@
+.update-task-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.update-task-form .radios {
+  display: flex;
+  gap: 1rem;
+}
+
+.update-task-form .radios .radio {
+  display: flex;
+  gap: 0.5rem;
+}

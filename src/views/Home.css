@@ -1,0 +1,14 @@
+.home {
+  max-width: 800px;
+  width: 100%;
+}
+
+.home .table-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.home .p-tag-value {
+  font-size: 0.6rem;
+}

@@ -1,0 +1,15 @@
+.register {
+  max-width: 400px;
+  width: 100%;
+}
+
+.register .p-inputtext {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.register .actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}

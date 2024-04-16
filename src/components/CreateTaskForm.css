@@ -1,0 +1,15 @@
+.create-task-form {
+  margin-top: 1rem;
+}
+
+.create-task-form .p-inputtext,
+.create-task-form .p-inputtextarea {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.create-task-form .actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
