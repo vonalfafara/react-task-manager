@@ -5,7 +5,6 @@ function useApi(token = null) {
     baseURL: import.meta.env.VITE_API,
     headers: {
       Accept: "application/json",
-      "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
     },
   });

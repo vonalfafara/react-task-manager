@@ -11,5 +11,5 @@
 .create-task-form .actions {
   display: flex;
   justify-content: flex-end;
-  margin-bottom: 1rem;
+  margin: 1rem 0;
 }

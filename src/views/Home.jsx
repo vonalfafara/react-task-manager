@@ -6,6 +6,7 @@ import { Column } from "primereact/column";
 import { Tag } from "primereact/tag";
 import { ConfirmDialog } from "primereact/confirmdialog";
 import { confirmDialog } from "primereact/confirmdialog";
+import { Paginator } from "primereact/paginator";
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import CreateTaskForm from "../components/CreateTaskForm";
@@ -25,28 +26,52 @@ const Home = () => {
   const [viewDialog, setViewDialog] = useState(false);
   const [updateDialog, setUpdateDialog] = useState(false);
   const [task, setTask] = useState({});
+  const [first, setFirst] = useState(0);
+  const [page, setPage] = useState(1);
+  const [totalItemsPerPage, setTotalItemsPerPage] = useState(0);
 
   const api = useApi(token);
   const toast = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+
     getTasks();
     return () => {};
   }, []);
 
+  useEffect(() => {
+    getTasks();
+    return () => {};
+  }, [page]);
+
   async function getTasks() {
     setTableLoading(true);
-    const { data } = await api.get("/tasks");
-    setTasks(data);
+    const { data } = await api.get(`/tasks?page=${page}`);
+    setTasks(data.data);
     setTableLoading(false);
+    setTotalItemsPerPage(data.total);
   }
 
-  async function createTask(title, description) {
+  async function createTask(title, description, file) {
     try {
+      let image = null;
+
+      if (file) {
+        const form = new FormData();
+        form.append("image", file);
+
+        const { data } = await api.post("/upload-image", form);
+        image = data.image;
+      }
+
       const body = {
         title,
         description,
+        image,
       };
 
       const { data } = await api.post("/tasks", body);
@@ -64,13 +89,34 @@ const Home = () => {
     }
   }
 
-  async function updateTask(updateTitle, updateDescription, updateStatus) {
+  async function updateTask(
+    updateTitle,
+    updateDescription,
+    updateStatus,
+    file,
+    oldImage
+  ) {
     setUpdateDialog(false);
     try {
+      let image = null;
+
+      if (file) {
+        const form = new FormData();
+        form.append("image", file);
+
+        if (oldImage) {
+          form.append("old_image", oldImage);
+        }
+
+        const { data } = await api.post("/upload-image", form);
+        image = data.image;
+      }
+
       const body = {
         title: updateTitle,
         description: updateDescription,
         status: updateStatus,
+        image,
       };
 
       const { data } = await api.put(`/tasks/${task.id}`, body);
@@ -200,8 +246,13 @@ const Home = () => {
     });
   }
 
+  function onPageChange(e) {
+    setFirst(e.first);
+    setPage(e.page + 1);
+  }
+
   return (
-    <Card title={`${user.name}'s tasks`} className="home">
+    <Card title={`${user?.name}'s tasks`} className="home">
       <Toast ref={toast} />
       <ConfirmDialog />
       <Button severity="danger" onClick={handleLogout}>
@@ -213,6 +264,12 @@ const Home = () => {
         <Column header="Status" body={getStatusTags} />
         <Column header="Actions" body={getActions} />
       </DataTable>
+      <Paginator
+        first={first}
+        rows={5}
+        totalRecords={totalItemsPerPage}
+        onPageChange={onPageChange}
+      />
       <ViewTask
         task={task}
         dialogState={viewDialog}

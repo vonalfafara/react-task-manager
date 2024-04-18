@@ -3,8 +3,11 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { RadioButton } from "primereact/radiobutton";
 import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
-import { useState, useEffect } from "react";
+import { FileUpload } from "primereact/fileupload";
+import { useState, useEffect, useRef } from "react";
 import "./UpdateTask.css";
+
+const images = import.meta.env.VITE_IMAGES;
 
 const UpdateTask = ({
   task,
@@ -13,6 +16,7 @@ const UpdateTask = ({
   handleUpdateTask,
   errors,
 }) => {
+  const file = useRef(null);
   const [title, setTitle] = useState(task.title);
   const [description, setDescription] = useState(task.description);
   const [status, setStatus] = useState(task.status);
@@ -27,16 +31,39 @@ const UpdateTask = ({
 
   function updateTask(e) {
     e.preventDefault();
-    handleUpdateTask(title, description, status);
+    handleUpdateTask(
+      title,
+      description,
+      status,
+      file.current.getFiles()[0],
+      task.image
+    );
     setTitle("");
     setDescription("");
     setStatus("");
   }
 
+  function headerTemplate(options) {
+    const { className, chooseButton, uploadButton, cancelButton } = options;
+
+    return (
+      <div
+        className={className}
+        style={{
+          backgroundColor: "transparent",
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
+        {chooseButton}
+        {cancelButton}
+      </div>
+    );
+  }
+
   return (
     <Dialog
       draggable={false}
-      dismissableMask={true}
       header={task.title}
       visible={dialogState}
       style={{ width: "700px" }}
@@ -54,6 +81,15 @@ const UpdateTask = ({
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           invalid={errors?.description}
+        />
+        {task.image ? (
+          <img src={`${images}/${task.image}`} className="task-image" />
+        ) : null}
+        <FileUpload
+          ref={file}
+          name="file"
+          accept="image/*"
+          headerTemplate={headerTemplate}
         />
         <div className="radios">
           <div className="radio">

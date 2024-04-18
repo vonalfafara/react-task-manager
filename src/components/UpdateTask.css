@@ -13,3 +13,7 @@
   display: flex;
   gap: 0.5rem;
 }
+
+.update-task-form .task-image {
+  max-width: 600px;
+}
