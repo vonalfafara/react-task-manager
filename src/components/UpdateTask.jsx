@@ -31,13 +31,7 @@ const UpdateTask = ({
 
   function updateTask(e) {
     e.preventDefault();
-    handleUpdateTask(
-      title,
-      description,
-      status,
-      file.current.getFiles()[0],
-      task.image
-    );
+    handleUpdateTask(title, description, status, file.current.getFiles()[0]);
     setTitle("");
     setDescription("");
     setStatus("");

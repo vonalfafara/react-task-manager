@@ -93,8 +93,7 @@ const Home = () => {
     updateTitle,
     updateDescription,
     updateStatus,
-    file,
-    oldImage
+    file
   ) {
     setUpdateDialog(false);
     try {
@@ -103,10 +102,6 @@ const Home = () => {
       if (file) {
         const form = new FormData();
         form.append("image", file);
-
-        if (oldImage) {
-          form.append("old_image", oldImage);
-        }
 
         const { data } = await api.post("/upload-image", form);
         image = data.image;
